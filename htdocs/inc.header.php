@@ -73,6 +73,7 @@ $debugAvail = array(
 "DEBUG_rfid_trigger_play_sh",
 "DEBUG_shuffle_play_sh",
 "DEBUG_single_play_sh",
+"DEBUG_rfid_video_play_shDEBUG_rfid_video_play_sh",
 );
 $debugOptions = array("TRUE", "FALSE");
 
