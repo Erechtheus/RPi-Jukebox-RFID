@@ -363,7 +363,26 @@ if [ ! -z "$FOLDER" -a ! -z ${FOLDER+x} -a -d "${AUDIOFOLDERSPATH}/${FOLDER}" ];
     # Playlist name
     if [ "${DEBUG_rfid_trigger_play_sh}" == "TRUE" ]; then echo "  Var \$PLAYLISTNAME: ${PLAYLISTNAME}"   >> $PATHDATA/../logs/debug.log; fi
     if [ "${DEBUG_rfid_trigger_play_sh}" == "TRUE" ]; then echo "  Var \$LASTPLAYLIST: ${LASTPLAYLIST}"   >> $PATHDATA/../logs/debug.log; fi
-    
+
+
+    #Check if the current directory is a video
+    #Currently this is done using a simple grep 'video' on the foldername..
+    #But we should better add a variable
+    if [ "$(echo $FOLDER | grep -c video)" -ge 1 ]; then
+	ISVIDEO=true
+    else
+	ISVIDEO=false
+    fi
+    if [ "${DEBUG_rfid_trigger_play_sh}" == "TRUE" ]; then echo "  VAR \$ISVIDEO: ${ISVIDEO}" >> $PATHDATA/../logs/debug.log; fi
+
+    if [ "$ISVIDEO" = true ] ; then
+	$PATHDATA/playout_controls.sh -c=playerstop #Stop audio playback
+	$PATHDATA/rfid_video_play.sh $AUDIOFOLDERSPATH/$FOLDER;
+	exit 1
+    else
+	$PATHDATA/dbuscontrol.sh stop;
+    fi
+ 
     # Setting a VAR to start "play playlist from start"
     # This will be changed in the following checks "if this is the second swipe"
     PLAYPLAYLIST=yes
